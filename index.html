@@ -1,11 +1,38 @@
 <html>
+
 <head>
-	<meta charset="UTF-8">
-	<title>China</title>
-	<script src="d3.min.js" charset="utf-8"></script>
-	<script src="jquery-2.1.0.min.js" charset="utf-8"></script>
+    <meta charset="UTF-8">
+    <title>China</title>
+
+    <script src="d3.min.js" charset="utf-8"></script>
+    <script src="raphael-min.js" charset="utf-8"></script>
+    <script src="g.raphael-min.js" charset="utf-8"></script>
+    <script src="g.bar-min.js" charset="utf-8"></script>
+
+    <script src="jquery-2.1.0.min.js" charset="utf-8"></script>
+    <script>
+    var dataset = [];
+    window.onload = function() {
+        var r = Raphael("holder"),
+            txtattr = {
+                font: "12px sans-serif"
+            };
+
+        d3.csv("1996.csv", function(data) {
+            dataset = data.map(function(d) {
+                return [+d["地方项目"]];
+            });
+            console.log(dataset);
+            r.barchart(120, 20, 1000, 120, dataset);
+        });
+
+    };
+    </script>
 </head>
-<body>
-	
+
+<body class="raphael" id="phodal">
+    <div id="holder"></div>
+
 </body>
+
 </html>
