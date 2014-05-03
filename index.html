@@ -8,31 +8,85 @@
     <script src="raphael-min.js" charset="utf-8"></script>
     <script src="g.raphael-min.js" charset="utf-8"></script>
     <script src="g.bar-min.js" charset="utf-8"></script>
-
+    <link rel="stylesheet" type="text/css" href="css/style.css">
     <script src="jquery-2.1.0.min.js" charset="utf-8"></script>
-    <script>
-    var dataset = [];
-    window.onload = function() {
-        var r = Raphael("holder"),
-            txtattr = {
-                font: "12px sans-serif"
-            };
-
-        d3.csv("1996.csv", function(data) {
-            dataset = data.map(function(d) {
-                return [+d["地方项目"]];
-            });
-            console.log(dataset);
-            r.barchart(120, 20, 1000, 120, dataset);
-        });
-
-    };
-    </script>
 </head>
 
-<body class="raphael" id="phodal">
-    <div id="holder"></div>
+<body>
+    <script>
+    var margin = {
+        top: 20,
+        right: 20,
+        bottom: 30,
+        left: 40
+    },
+        width = 960 - margin.left - margin.right,
+        height = 500 - margin.top - margin.bottom;
 
+    var x = d3.scale.ordinal()
+        .rangeRoundBands([0, width], .1);
+
+    var y = d3.scale.linear()
+        .range([height, 0]);
+
+    var xAxis = d3.svg.axis()
+        .scale(x)
+        .orient("bottom");
+
+    var yAxis = d3.svg.axis()
+        .scale(y)
+        .orient("left")
+
+    var svg = d3.select("body").append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    d3.csv("1996.csv", type, function(error, data) {
+        x.domain(data.map(function(d) {
+            return d["地区"];
+        }));
+        y.domain([0, d3.max(data, function(d) {
+            return d["中央项目"];
+        })]);
+        svg.append("g")
+            .attr("class", "x axis")
+            .attr("transform", "translate(0," + height + ")")
+            .call(xAxis);
+
+        svg.append("g")
+            .attr("class", "y axis")
+            .call(yAxis)
+            .append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 6)
+            .attr("dy", ".71em")
+            .style("text-anchor", "end")
+            .text("中央项目");
+
+        svg.selectAll(".bar")
+            .data(data)
+            .enter().append("rect")
+            .attr("class", "bar")
+            .attr("x", function(d) {
+                return x(d["地区"]);
+            })
+            .attr("width", x.rangeBand())
+            .attr("y", function(d) {
+                return y(d["中央项目"]);
+            })
+            .attr("height", function(d) {
+                return height - y(d["中央项目"]);
+            });
+
+    });
+
+    function type(d) {
+        d["中央项目"] = +d["中央项目"];
+        return d;
+    }
+    </script>
 </body>
 
 </html>
