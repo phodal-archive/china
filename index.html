@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <title>China</title>
 
-    <script src="d3.min.js" charset="utf-8"></script>
-    <script src="raphael-min.js" charset="utf-8"></script>
-    <script src="g.raphael-min.js" charset="utf-8"></script>
-    <script src="g.bar-min.js" charset="utf-8"></script>
+    <script src="js/d3.min.js" charset="utf-8"></script>
+    <script src="js/raphael-min.js" charset="utf-8"></script>
+    <script src="js/g.raphael-min.js" charset="utf-8"></script>
+    <script src="js/g.bar-min.js" charset="utf-8"></script>
     <link rel="stylesheet" type="text/css" href="css/style.css">
-    <script src="jquery-2.1.0.min.js" charset="utf-8"></script>
+    <script src="js/jquery-2.1.0.min.js" charset="utf-8"></script>
 </head>
 
 <body>
@@ -43,7 +43,7 @@
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    d3.csv("1996.csv", type, function(error, data) {
+    d3.csv("data/1996.csv", type, function(error, data) {
         x.domain(data.map(function(d) {
             return d["地区"];
         }));
